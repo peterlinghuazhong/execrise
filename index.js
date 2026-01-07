@@ -15,6 +15,6 @@ mongoose
 app.use("/user", require("./routes/UserRoutes"));
 app.use("/", require("./routes/productRoutes"));
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server running on port 3000");
 });
