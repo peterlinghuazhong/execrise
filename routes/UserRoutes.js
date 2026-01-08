@@ -6,7 +6,10 @@ const jwt = require("jsonwebtoken");
 
 router.post("/register", async (req, res) => {
   try {
-    const hashed = await bcrypt.hash(req.body.password, 10);
+    const hashed = await bcrypt.hash(
+      req.body.password,
+      Number(process.env.BCRYPT_SALT_ROUNDS)
+    );
     const user = new User({
       email: req.body.email,
       password: hashed,
@@ -34,7 +37,7 @@ router.post("/login", async (req, res) => {
     if (!isMatch) return res.status(401).send("Invalid Credentials");
     else {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: process.env.JWT_EXPIRES_IN,
       });
       res.json({ token });
     }
